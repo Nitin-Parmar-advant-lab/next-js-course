@@ -1,4 +1,8 @@
-import { DUMMY_NEWS } from "@/dummy-news";
+// "use client";
+
+import ModalBackdrop from "@/components/modal-backdrop";
+import { getNewsItem } from "@/lib/news";
+// import { DUMMY_NEWS } from "@/dummy-news";
 import { notFound } from "next/navigation";
 
 // Intercepting route:
@@ -9,9 +13,15 @@ import { notFound } from "next/navigation";
 
 // in simple, it intersept an internal navigation request and instead of showing the page you would see if you would reaload the page or come to the page from outside the website a diffrent page will be shown
 
-export default function InterceptedImagePage({ params }) {
+export default async function  InterceptedImagePage({ params }) {
+    // for programmatically navigation in nextJS we use use router hook which is from "next/navigation", that will return object that contain lot of nethod like back, refresh and so on...
+    // useRouter is client component so we have to use "use client" directive
+    // const router = useRouter();
+
     const newsSlug = params.slug;
-    const newsItem = DUMMY_NEWS.find((newsItem) => newsItem.slug === newsSlug);
+    // const newsItem = DUMMY_NEWS.find((newsItem) => newsItem.slug === newsSlug);
+
+    const newsItem = await getNewsItem(newsSlug)
 
     if (!newsItem) {
         notFound();
@@ -33,7 +43,7 @@ export default function InterceptedImagePage({ params }) {
 
     return (
         <>
-            <div className="modal-backdrop"></div>
+            <ModalBackdrop />
             <dialog className="modal" open>
                 <div className="fullscreen-image">
                     <img
